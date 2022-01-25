@@ -1,0 +1,2 @@
+SPECIES = "species"
+GENRE = "genre"
