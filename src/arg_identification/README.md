@@ -12,3 +12,5 @@ The build_pathogens_list.py script is usefull to produce the list of all pathoge
 python3 /path/to/main.py --plasmid_classification_path /path/to/plasmid_classification_file --microbial_classification_path /path/to/microbial_classification_file --microbial_report_path /path/to/microbial_report_file --rgi_path /path/to/rgi_output_file --genes_list /path/to/AR_genes_list --pathogens_list /path/to/pathogens_list
 ```
 ```
+python3 /path/to/build_pathogens_list.py --family_path /path/to/pathogens_families --genre_path /path/to/pathogens_genres --species_path /path/to/pathogens_species --microbial_classification_path /path/to/microbial_classification_file --microbial_report_path /path/to/microbial_report_file --pathogens_list /path/where/to/store/the/output
+```
