@@ -4,3 +4,10 @@ The bash script you see here is meant to execute pipeline shown below. In order 
 </p>
 
 In the other folders you will find the README file that will explain the purpose of the code inside them.
+
+
+## Example Usage
+
+```
+bash pipeline_POR.bash
+```
