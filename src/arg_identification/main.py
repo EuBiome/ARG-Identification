@@ -20,7 +20,7 @@ pathogens_list = args["pathogens_list"]
 
 
 path_len = len(microbial_classification_path.split("/"))
-base_path_pieces = microbial_classification_path.split("/")[0:path_len-2]
+base_path_pieces = microbial_classification_path.split("/")[0:path_len-1]
 base_path = ""
 
 for i in range(len(base_path_pieces)):
@@ -127,7 +127,7 @@ with open(rgi_path, mode="r") as rgi_file, open(plasmid_classification_path, mod
             else:
                 for j in range(number_of_genes):
                     identified_gene = identified_genes.split(";")[j]
-                    print(identified_gene)
+                    #print(identified_gene)
                     for list in arg_matrix:
                         genes_names_number = len(list)
                         for i in range(genes_names_number):
