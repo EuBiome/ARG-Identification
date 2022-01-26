@@ -12,6 +12,23 @@ from pandas import DataFrame
 from helpers import find_taxa_path, cnt_per_drug_abundance, extract_species_name, link_taxa_antibiotic, group_by_taxa, \
     to_proper_form, prepare_input_for_graph, draw_graph
 
+# This is a sample Python script.
+
+# Press Maiusc+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+
+#
+# def print_hi(name):
+#     # Use a breakpoint in the code line below to debug your script.
+#     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+#
+#
+# # Press the green button in the gutter to run the script.
+# if __name__ == '__main__':
+#     print_hi('PyCharm')
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
 
 # import subprocess
 #
@@ -23,7 +40,7 @@ ap.add_argument("--level_of_interest", required=True, help="Write S if you want 
 ap.add_argument("--rgi_output", required=True, help="Insert the path to the RGI output")
 ap.add_argument("--kraken2_output", required=True, help="path to the kraken2 output")
 ap.add_argument("--kraken2_report", required=True, help="path to the kraken2 report")
-ap.add_argument("--pathogens-list", required=True, help="path of the file containg the pathogens list")
+#ap.add_argument("--pathogens-list", required=True, help="path of the file containg the pathogens list")
 ap.add_argument("--rgi_analysis", required=True,
                 help="Insert the path where you want to store the result of your analysis")
 
@@ -32,12 +49,10 @@ level_of_interest = args["level_of_interest"]
 rgi_output = args["rgi_output"]
 kraken2_output = args["kraken2_output"]
 rgi_analysis = args["rgi_analysis"]
-pathogens = args["pathogens_list"]
+#pathogens = args["pathogens_list"]
 kraken2_report = args["kraken2_report"]
 
-with open(rgi_output, mode='r') as rgi_file, open(kraken2_output, mode='r') as k2_results_file, open(kraken2_report,
-                                                                                                     mode="r") as report_file, open(
-    pathogens, mode='r', encoding='ISO-8859-1') as pathogens_file:
+with open(rgi_output, mode='r') as rgi_file, open(kraken2_output, mode='r') as k2_results_file, open(kraken2_report, mode="r") as report_file:
     # list of all the contigs contigs associated to the ORFs identified by rgi
     orf_contigs = []
     # [['contig_id1', ['macrolide antibiotic', 'fluoroquinolone antibiotic',...]], ['contig_id2',['macrolide
@@ -102,33 +117,6 @@ with open(rgi_output, mode='r') as rgi_file, open(kraken2_output, mode='r') as k
                     level = "U"
         return level
 
-    # Creo una lista a partire dal file dei patogeni così formata
-    # Ciascun elemento è così strutturato: [famiglia, genere, specie]
-    pathogens_list = []
-    line_counter = 0
-    for pathogen in pathogens_file:
-        if line_counter > 0:
-            pathogen_element = []
-            family = pathogen.split()[0].split(";f__")[1].split(";g__")[0]
-            pathogen_element.append(family)
-            if pathogen.split()[0].split(";g__")[1][0] != ";":
-                genre = pathogen.split()[0].split(";g__")[1].split(";s__")[0]
-            else:
-                genre = "---"
-            pathogen_element.append(genre)
-            if len(pathogen.split()[0].split(";s")[1]) > 2:
-                specie = pathogen.split()[0].split(";s__")[1]
-            else:
-                specie = "---"
-            pathogen_element.append(specie)
-            pathogen_element.append(pathogen.split()[1])
-            level = classification_level(specie, genre, family)
-            pathogen_element.append(level)
-            pathogens_list.append(pathogen_element)
-        line_counter += 1
-
-    pathogens_list = sorted(pathogens_list, key=operator.itemgetter(0))
-
     find_taxa_path(labelled_contigs, report_to_lists)
 
     for i in range(len(labelled_contigs)):
@@ -150,12 +138,17 @@ with open(rgi_output, mode='r') as rgi_file, open(kraken2_output, mode='r') as k
     else:
         taxa_antibiotic_associators = link_taxa_antibiotic(info_array, labelled_contigs, GENRE)
 
+    #taxa_antibiotic_associators_genre = link_taxa_antibiotic(info_array, labelled_contigs, GENRE)
+
     # sorting the list according to the taxid
     sorted_taxa_antibiotic_associators = sorted(taxa_antibiotic_associators, key=operator.itemgetter(0))
+    #sorted_taxa_antibiotic_associators_genre = sorted(taxa_antibiotic_associators_genre, key=operator.itemgetter(0))
 
     # if two tax-id are the same I merge the antibiotic associated to that tax-id
     # merged_taxa_antibiotic_associators_genre = group_by_taxa(sorted_taxa_antibiotic_associators_genre)
     merged_taxa_antibiotic_associators = group_by_taxa(sorted_taxa_antibiotic_associators)
+
+    #for i in merged_taxa_antibiotic_associator_species: print(i)
 
     final_taxa_antibiotic_associators = to_proper_form(merged_taxa_antibiotic_associators, all_drug_keys,
                                                        drug_abundance_list)
