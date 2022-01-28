@@ -21,6 +21,7 @@ pathogens_list = args["pathogens_list"]
 
 path_len = len(microbial_classification_path.split("/"))
 base_path_pieces = microbial_classification_path.split("/")[0:path_len-1]
+print(base_path_pieces)
 base_path = ""
 
 for i in range(len(base_path_pieces)):
@@ -45,6 +46,7 @@ with open(rgi_path, mode="r") as rgi_file, open(plasmid_classification_path, mod
             contig_des = rgi_line.split("\t")[1]
             contig = str(contig_des.split("_")[0] + "_" + contig_des.split("_")[1])
             arg = str(rgi_line.split("\t")[8])
+            #print(arg)
             if cnt1 == 1:
                 rgi_array = []
                 rgi_array.append(contig)
@@ -108,7 +110,6 @@ with open(rgi_path, mode="r") as rgi_file, open(plasmid_classification_path, mod
                 classification_list.append(arg_list[1])
 
     arg_matrix = arg_to_matrix(genes_list)
-    #print(arg_matrix)
 
     # Genero il file 1
     for line in classification_matrix:
@@ -125,24 +126,41 @@ with open(rgi_path, mode="r") as rgi_file, open(plasmid_classification_path, mod
                             list_1.write(list[0] + "\t" + line[4] + "\t" + line[1] + "\n")
                             line.append("bad_gene")
             else:
+                cnt = 0
+                lista_arg_contig = ""
                 for j in range(number_of_genes):
+                    cnt +=1
                     identified_gene = identified_genes.split(";")[j]
-                    #print(identified_gene)
                     for list in arg_matrix:
                         genes_names_number = len(list)
                         for i in range(genes_names_number):
                             gene_name = list[i]
                             if identified_gene == gene_name:
-                                list_1.write(list[0] + "\t" + line[4] + "\t" + line[1] + "\n")
-                                if len(line)< 8: line.append("bad_gene")
+                                #rimuovi dalla lista i geni cattivi identificati
+                                if cnt == 1:
+                                    updated_line6 = identified_genes.replace(identified_gene + ";", "")
+                                    line[6] = updated_line6
+                                elif cnt == number_of_genes:
+                                    updated_line6 = identified_genes.replace(";" + identified_gene, "")
+                                    line[6] = updated_line6
+                                else:
+                                    updated_line6 = identified_genes.replace(";" + identified_gene + ";", ";")
+                                    line[6] = updated_line6
 
-    
+                                if lista_arg_contig == "":
+                                    lista_arg_contig = lista_arg_contig + list[0]
+                                else:
+                                    lista_arg_contig = lista_arg_contig + ";" + list[0]
+                if lista_arg_contig != "":
+                    list_1.write(lista_arg_contig + "\t" + line[4] + "\t" + line[1] + "\n")
+
     pathogens_set = set()
     for line in pathogens_file:
         pathogens_set.add(line[:-1])
     
     for line in classification_matrix:
         if len(line) == 7:
+            print(line)
             if line[2] == "unclassified (taxid 0)":
                 list_4.write(line[6] + "\t" + line[4] + "\t" + line[1] + "\n")
             else:
