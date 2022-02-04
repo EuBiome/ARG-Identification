@@ -1,6 +1,6 @@
 # ARG-Identification
 This project aims to detect and analyze antibiotic resistance genes in metagenomic samples. 
-The project has benn funded by Regione Veneto - POR-FESR 2014-2020 - Azione 1.1.1  Submission N. 10232721
+The project has been funded by Regione Veneto - POR-FESR 2014-2020 - Azione 1.1.1  Submission N. 10232721
 
 In order to run the code it is necessary to install python3, kraken2, rgi, megahit and trimmomatic.
 
