@@ -20,6 +20,9 @@ basefolder=${read_1%/*}
 echo Insert the path of the kraken2 database that you want to use
 read db_path
 
+echo Insert the path of the kraken2 plasmid database that you want to use
+read plasmid_db_path
+
 echo Do you want to precess the reads with Trimmomatic? type yes or no
 read answer
 
@@ -58,5 +61,6 @@ echo The classification is starting with kraken2
 
 
 kraken2 --memory-mapping --db "$db_path" --use-names --report "$basefolder/k2_report" --output "$basefolder/k2_results" "$basefolder/Megahit/final.contigs.fa"
+kraken2 --db "$plasmid_db_path" --use-names --report "$basefolder/k2_plasmid_report" --output "$basefolder/k2_plasmid_results" "$basefolder/Megahit/final.contigs.fa"
 
 echo The pipeline is termined
